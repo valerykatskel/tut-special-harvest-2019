@@ -78,6 +78,9 @@ export default {
   margin: 20px 0 0 0;
   width: 100%;
 }
+.b-range-slider {
+  padding: 0 10px;
+}
 .range-slider .range-slider-knob {
   width: 16px;
   height: 16px;
