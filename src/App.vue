@@ -436,8 +436,8 @@ export default {
     setPercents(index) {
       // index - индекс поля, значение которого мы изменяем
       let filteredSections = this.sections.filter(el=>el.value !== 0);
-      debugger
-      let length = this.filteredSections.length - 1;
+      
+      let length = filteredSections.length - 1;
       let percentOld = this.getValueFromRange(index);
       let percentNew = this.getChangedValue(index);
       
@@ -445,9 +445,10 @@ export default {
       let diffRest = Math.abs(diff);
       let percentForOne = diffRest / length;
 
-      this.filteredSections.forEach((el, idx) => {
+      filteredSections.forEach((el, idx) => {
         
         if (idx !== index) {
+          let cur = 0;
           // тут проходимся по каждому значению оставшися полей и распределяем поровну значение, на которое был сдвинут ползунок
           if (this.isNumberWithoutRemainder(percentForOne)) {
             // если в результате деления значения, на которое увеличился передвигаемый ползунок, на оставшиеся ползунки полилось целое значение
@@ -466,7 +467,7 @@ export default {
               el.value += percentForOne
             }
           } else {
-            let cur = Math.round(percentForOne);
+            cur = Math.round(percentForOne);
             diffRest -= cur;
             if (diffRest >= 0) {
               if (diff > 0) {
