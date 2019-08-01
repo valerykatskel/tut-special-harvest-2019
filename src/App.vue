@@ -208,15 +208,16 @@ export default {
       let diff = percentNew - percentOld;
       if (diff === 0) return;
 
-      let length = this.sections.length - 1;
+      let filteredSections = this.sections.filter((el, num) => (el.value > 0 || num === index)) ;
+      let length = filteredSections.length;
 
       let diffRest = Math.abs(diff);
-      let percentForOne = diffRest / length;
+      let percentForOne = diffRest / (length-1);
       let cur = Math.ceil(percentForOne);
       
       this.sections.forEach((el, idx) => {
         if (idx !== index) {
-          if (el.value !== 0 || diffRest > 0) {
+          if (el.value !== 0 && diffRest > 0) {
             // тут проходимся по каждому значению оставшися полей и распределяем поровну значение, на которое был сдвинут ползунок
             diffRest -= cur;
             if (diffRest < 0) {
@@ -258,7 +259,7 @@ export default {
       let percent = 0;
 
       this.sections.forEach((el, idx) => {
-        percent = random.int(1, 300);
+        percent = random.int(300, 600);
 
         let newValue = 0;
         if (idx === 0) {
