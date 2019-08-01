@@ -16,26 +16,26 @@
             <span>урожай: {{getHarvest(0)}}</span>
           </p>
           <div class="b-range-slider">
-            <input 
+            <!-- <input 
               type="range" 
-              class="slider slider--hybridRye"
+              class="slider slider--weat"
               min="0" 
               max="1000" 
               step="10" 
               name="weat" 
               v-model.number="valueWeat"
               @input="setPercents(0)"
-            />
+            /> -->
             <!-- <vue-slider :min="0" :max="1000" step="10" name="weat" v-model.number="valueWeat"/> -->
-            <!-- <range-slider
+            <range-slider
               class="slider slider--weat"
               min="0"
               max="1000"
-              step="10"
+              step="1"
               name="weat"
               v-model.number="valueWeat"
               @input="setPercents(0)"
-            ></range-slider> -->
+            ></range-slider>
           </div>
 
           <!-- рожь -->
@@ -46,15 +46,16 @@
           </p>
 
           <div class="b-range-slider">
-            <!-- <range-slider
+            <range-slider
               class="slider slider--rye"
               min="0"
               max="1000"
-              step="10"
+              step="1"
               name="rye"
               v-model.lazy="valueRye"
-            ></range-slider> -->
-            <input
+              @input="setPercents(1)"
+            ></range-slider>
+            <!-- <input
               type="range"
               class="slider slider--rye"
               min="0"
@@ -63,7 +64,7 @@
               name="rye"
               v-model.lazy="valueRye"
               @input="setPercents(1)"
-            />
+            /> -->
           </div>
 
           <!-- гибридная рожь -->
@@ -74,15 +75,16 @@
           </p>
 
           <div class="b-range-slider">
-            <!-- <range-slider
+            <range-slider
               class="slider slider--hybridRye"
               min="0"
               max="1000"
-              step="10"
+              step="1"
               name="hybridRye"
               v-model.number="valueHybridRye"
-            ></range-slider> -->
-            <input
+              @input="setPercents(2)"
+            ></range-slider>
+            <!-- <input
               type="range"
               class="slider slider--hybridRye"
               min="0"
@@ -90,7 +92,8 @@
               step="10"
               name="hybridRye"
               v-model.number="valueHybridRye"
-            />
+              @input="setPercents(2)"
+            /> -->
           </div>
 
           <!-- кукуруза -->
@@ -101,15 +104,16 @@
           </p>
 
           <div class="b-range-slider">
-            <!-- <range-slider
+            <range-slider
               class="slider slider--corn"
               min="0"
               max="1000"
-              step="10"
+              step="1"
               name="corn"
               v-model.number="valueCorn"
-            ></range-slider> -->
-            <input
+              @input="setPercents(3)"
+            ></range-slider>
+            <!-- <input
               type="range"
               class="slider slider--corn"
               min="0"
@@ -117,7 +121,8 @@
               step="10"
               name="corn"
               v-model.number="valueCorn"
-            />
+              @input="setPercents(3)"
+            /> -->
           </div>
 
           <!-- рапс -->
@@ -128,15 +133,16 @@
           </p>
 
           <div class="b-range-slider">
-            <!-- <range-slider
+            <range-slider
               class="slider slider--rape"
               min="0"
               max="1000"
-              step="10"
+              step="1"
               name="rape"
               v-model.number="valueRape"
-            ></range-slider> -->
-            <input
+              @input="setPercents(4)"
+            ></range-slider>
+            <!-- <input
               type="range"
               class="slider slider--rape"
               min="0"
@@ -144,7 +150,8 @@
               step="10"
               name="rape"
               v-model.number="valueRape"
-            />
+              @input="setPercents(4)"
+            /> -->
           </div>
         </div>
         <div class="fields-chart">
@@ -444,11 +451,11 @@ export default {
       let diff = percentNew - percentOld;
       let diffRest = Math.abs(diff);
       let percentForOne = diffRest / length;
-
+      let cur = 0;
       filteredSections.forEach((el, idx) => {
         
         if (idx !== index) {
-          let cur = 0;
+          cur = Math.round(percentForOne);
           // тут проходимся по каждому значению оставшися полей и распределяем поровну значение, на которое был сдвинут ползунок
           if (this.isNumberWithoutRemainder(percentForOne)) {
             // если в результате деления значения, на которое увеличился передвигаемый ползунок, на оставшиеся ползунки полилось целое значение
