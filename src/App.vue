@@ -7,152 +7,17 @@
       <div class="sections-settings">
         <div class="fields-settings">
           <p>Общая площадь полей: {{totalFields}} га.</p>
-          <p>Всего засеяно: {{total}}% | Осталось засеять: {{remaining}}%</p>
+          <p>Всего засеяно: {{total}}% | Осталось засеять: {{remaining.toFixed(2)}}%</p>
 
-          <!-- пшеница -->
-          <p class="field-type">
-            Пшеница: {{(sections[0].value/10).toFixed(2)}}%
-            <span>урожайность: {{sections[0].harvest}} ц/га</span>
-            <span>урожай: {{getHarvest(0)}}</span>
-          </p>
-          <div class="b-range-slider">
-            <!-- <input 
-              type="range" 
-              class="slider slider--weat"
-              min="0" 
-              max="1000" 
-              step="10" 
-              name="weat" 
-              v-model.number="valueWeat"
-              @input="setPercents(0)"
-            /> -->
-            <!-- <vue-slider :min="0" :max="1000" step="10" name="weat" v-model.number="valueWeat"/> -->
-            <range-slider
-              class="slider slider--weat"
-              min="0"
-              max="1000"
-              step="1"
-              name="weat"
-              v-model.number="valueWeat"
-              @input="setPercents(0)"
-            ></range-slider>
-          </div>
-
-          <!-- рожь -->
-          <p class="field-type">
-            Рожь: {{(sections[1].value/10).toFixed(2)}}%
-            <span>урожайность: {{sections[1].harvest}} ц/га</span>
-            <span>урожай: {{getHarvest(1)}}</span>
-          </p>
-
-          <div class="b-range-slider">
-            <range-slider
-              class="slider slider--rye"
-              min="0"
-              max="1000"
-              step="1"
-              name="rye"
-              v-model.lazy="valueRye"
-              @input="setPercents(1)"
-            ></range-slider>
-            <!-- <input
-              type="range"
-              class="slider slider--rye"
-              min="0"
-              max="1000"
-              step="10"
-              name="rye"
-              v-model.lazy="valueRye"
-              @input="setPercents(1)"
-            /> -->
-          </div>
-
-          <!-- гибридная рожь -->
-          <p class="field-type">
-            Гибридная рожь: {{(sections[2].value/10).toFixed(2)}}%
-            <span>урожайность: {{sections[2].harvest}} ц/га</span>
-            <span>урожай: {{getHarvest(2)}}</span>
-          </p>
-
-          <div class="b-range-slider">
-            <range-slider
-              class="slider slider--hybridRye"
-              min="0"
-              max="1000"
-              step="1"
-              name="hybridRye"
-              v-model.number="valueHybridRye"
-              @input="setPercents(2)"
-            ></range-slider>
-            <!-- <input
-              type="range"
-              class="slider slider--hybridRye"
-              min="0"
-              max="1000"
-              step="10"
-              name="hybridRye"
-              v-model.number="valueHybridRye"
-              @input="setPercents(2)"
-            /> -->
-          </div>
-
-          <!-- кукуруза -->
-          <p class="field-type">
-            Кукуруза: {{(sections[3].value/10).toFixed(2)}}%
-            <span>урожайность: {{sections[3].harvest}} ц/га</span>
-            <span>урожай: {{getHarvest(3)}}</span>
-          </p>
-
-          <div class="b-range-slider">
-            <range-slider
-              class="slider slider--corn"
-              min="0"
-              max="1000"
-              step="1"
-              name="corn"
-              v-model.number="valueCorn"
-              @input="setPercents(3)"
-            ></range-slider>
-            <!-- <input
-              type="range"
-              class="slider slider--corn"
-              min="0"
-              max="1000"
-              step="10"
-              name="corn"
-              v-model.number="valueCorn"
-              @input="setPercents(3)"
-            /> -->
-          </div>
-
-          <!-- рапс -->
-          <p class="field-type">
-            Рапс: {{(sections[4].value/10).toFixed(2)}}%
-            <span>урожайность: {{sections[4].harvest}} ц/га</span>
-            <span>урожай: {{getHarvest(4)}}</span>
-          </p>
-
-          <div class="b-range-slider">
-            <range-slider
-              class="slider slider--rape"
-              min="0"
-              max="1000"
-              step="1"
-              name="rape"
-              v-model.number="valueRape"
-              @input="setPercents(4)"
-            ></range-slider>
-            <!-- <input
-              type="range"
-              class="slider slider--rape"
-              min="0"
-              max="1000"
-              step="10"
-              name="rape"
-              v-model.number="valueRape"
-              @input="setPercents(4)"
-            /> -->
-          </div>
+          <harvest-field
+            v-for="(section, index) in this.sections" 
+            :key="index"
+            :rangeId="index"
+            :section="section"
+            :harvest="getHarvest(index)"
+            @range-changed="setPercents($event)"
+          />        
+          
         </div>
         <div class="fields-chart">
           <vc-donut
@@ -164,7 +29,6 @@
             :sections="sections"
             :total="1000"
             :start-angle="0"
-            @section-click="handleSectionClick"
           >
             <h1>100%</h1>
           </vc-donut>
@@ -183,64 +47,56 @@
 </template>
 
 <script>
-import random from "random";
-import RangeSlider from "vue-range-slider";
-import ResultSection from "./components/ResultSection.vue";
-// you probably need to import built-in style
-import "vue-range-slider/dist/vue-range-slider.css";
+import random from 'random';
+import ResultSection from './components/ResultSection.vue';
+import HarvestField from './components/HarvestField.vue';
 
 export default {
-  name: "App",
+  name: 'App',
+
   components: {
-    RangeSlider,
     ResultSection,
+    HarvestField,
   },
+
   data () {
     return {
-      slider: {
-        lineHeight: 10,
-        processStyle: {
-          backgroundColor: "red"
-        }
-      },
-      statusActiveRange: 0,
-      statusNeedChangedRange: 0,
-      valueWeat: 200,
-      valueRye: 200,
-      valueHybridRye: 200,
-      valueCorn: 200,
-      valueRape: 200,
       showResult: false,
       totalFields: 6173000, // общая площать всех полей, доступных для засева (га)
       sections: [
         {
-          label: "Пшеница",
+          label: 'Пшеница',
+          name: 'wheat',
           value: 200,
-          color: "#8f2901",
+          color: '#8f2901',
           harvest: 36.5
         },
         {
-          label: "Рожь",
+          label: 'Рожь',
+          name: 'rye',
           value: 200,
-          color: "#d56844",
+          color: '#d56844',
           harvest: 26.2
         },
         {
-          label: "Гибридная рожь",
+          label: 'Гибридная рожь',
+          name: 'hybridRye',
           value: 200,
-          color: "#ffaf3a",
+          color: '#ffaf3a',
           harvest: 80.0
         },
         {
-          label: "Кукуруза",
+          label: 'Кукуруза',
+          name: 'corn',
           value: 200,
-          color: "#e0cd64",
+          color: '#e0cd64',
           harvest: 53.2
         },
         {
-          label: "Рапс",
+          label: 'Рапс',
+          name: 'rape',
           value: 200,
-          color: "#458865",
+          color: '#458865',
           harvest: 20.9
         }
       ]
@@ -249,69 +105,6 @@ export default {
 
   created() {
     this.setPercentsRandom();
-  },
-
-  watch: {
-    valueWeat(newValue, oldValue) {
-      //this.setPercents (false, 0);
-      // if (this.statusActiveRange !== 0) {
-      //   this.statusActiveRange = 0;
-      //   this.statusNeedChangedRange = 0;
-      // }
-      // let diff = (newValue - oldValue) * -1;
-      // console.log(`diffWeat=${diff}`);
-
-      // this.sections.forEach((el, idx) => {
-      //   if (idx === this.statusNeedChangedRange) {
-      //     el.value += diff; // проверить
-      //     this.statusNeedChangedRange += 1;
-
-      //     if (this.statusNeedChangedRange > this.sections.lenght) {
-      //       this.statusNeedChangedRange = 0;
-      //     }
-      //   }
-      // });
-
-      //this.updateChartData(newValue, oldValue, 0);
-      // if (newValue > 500) {
-      //   this.valueWeat = oldValue;
-      // } else {
-      //   //this.updateChartData(newValue, oldValue, 0);
-      // }
-    },
-
-    valueRye(newValue, oldValue) {
-      // if (this.statusActiveRange !== 1) {
-      //   this.statusActiveRange = 1;
-      //   this.statusNeedChangedRange = 0;
-      // }
-      // let diff = (newValue - oldValue) * -1;
-      // console.log(`diffRye=${diff}`);
-
-      // this.sections.forEach((el, idx) => {
-      //   if (idx === this.statusNeedChangedRange) {
-      //     el.value += diff; // проверить
-      //     this.statusNeedChangedRange += 1;
-
-      //     if (this.statusNeedChangedRange > this.sections.lenght) {
-      //       this.statusNeedChangedRange = 0;
-      //     }
-      //   }
-      // });
-      //this.updateChartData(newValue, oldValue, 1);
-    },
-
-    valueHybridRye(newValue, oldValue) {
-      //this.updateChartData(newValue, oldValue, 2);
-    },
-
-    valueCorn(newValue, oldValue) {
-      //this.updateChartData(newValue, oldValue, 3);
-    },
-
-    valueRape(newValue, oldValue) {
-      //this.updateChartData(newValue, oldValue, 4);
-    }
   },
 
   methods: {
@@ -357,22 +150,8 @@ export default {
       return this.total < 1000 ? 1000 : this.sections[index].value;
     },
 
-    handleSectionClick(section) {
-      console.log(`${section.label} clicked.`);
-    },
-
     onSow() {
       this.showResult = !this.showResult;
-    },
-
-    updateChartData(nv, ov, idx) {
-      let deltaValue = nv - ov;
-      if (this.total + deltaValue <= 1000) {
-        this.sections[idx].value = nv;
-        this.correctValues(idx, deltaValue);
-      } else {
-        console.log(`> 100!!! OLD:${ov} NEW: ${nv}`);
-      }
     },
 
     getHarvest(index) {
@@ -392,7 +171,7 @@ export default {
           return `${(result / 1000000).toFixed(2)} млн тонн`;
         if (result > 1000) return `${(result / 1000).toFixed(2)} тысяч тонн`;
         return `${result} тонн`;
-      } else return "пока не собрали";
+      } else return 'пока не собрали';
     },
 
     clearPercents() {
@@ -403,24 +182,6 @@ export default {
 
     getValueFromRange (i) {
       return this.sections[i].value;
-    },
-
-    getChangedValue (idx) {
-      let res;
-      if (idx === 0) res = this.valueWeat;
-      if (idx === 1) res = this.valueRye;
-      if (idx === 2) res = this.valueHybridRye;
-      if (idx === 3) res = this.valueCorn;
-      if (idx === 4) res = this.valueRape;
-      return res;
-    },
-
-    updateModel (idx, val) {
-      if (idx === 0) this.valueWeat = val;
-      if (idx === 1) this.valueRye = val;
-      if (idx === 2) this.valueHybridRye = val;
-      if (idx === 3) this.valueCorn = val;
-      if (idx === 4) this.valueRape = val;    
     },
 
     isNumberWithoutRemainder (val) {
@@ -437,83 +198,58 @@ export default {
           return false;
         }
       }
-      return false;
     },
 
-    setPercents(index) {
+    setPercents(data) {
+      let index = data.rangeId;
       // index - индекс поля, значение которого мы изменяем
-      let filteredSections = this.sections.filter(el=>el.value !== 0);
-      
-      let length = filteredSections.length - 1;
-      let percentOld = this.getValueFromRange(index);
-      let percentNew = this.getChangedValue(index);
-      
+      let percentOld = data.oldValue;
+      let percentNew = typeof data.newValue === 'number'? data.newValue : data.newValue.target.valueAsNumber;
       let diff = percentNew - percentOld;
+      if (diff === 0) return;
+
+      let length = this.sections.length - 1;
+
       let diffRest = Math.abs(diff);
       let percentForOne = diffRest / length;
       let cur = 0;
-      filteredSections.forEach((el, idx) => {
-        
+      
+      this.sections.forEach((el, idx) => {
         if (idx !== index) {
-          cur = Math.round(percentForOne);
+          if (el.value === 0) return;
+        
           // тут проходимся по каждому значению оставшися полей и распределяем поровну значение, на которое был сдвинут ползунок
-          if (this.isNumberWithoutRemainder(percentForOne)) {
-            // если в результате деления значения, на которое увеличился передвигаемый ползунок, на оставшиеся ползунки полилось целое значение
-            if (diff > 0) {
-              // если нужно уменьшать значения остальных
-              if (el.value - cur >= 0) {
-                // если в результате уменьшения значение ползунка останется большим или равным нулю, то просто уменьшаем
-                el.value -= cur
-              } else {
-                // если в результате уменьшения значение ползунка окажется меньше нуля, то нужно "вернуть" разницу, чтобы поделить ее на оставшиеся ползунки
-                diffRest += (cur - el.value);
-                el.value = 0;
-              }
-
+          diffRest -= cur;
+          if (diffRest >= 0) {
+            cur = Math.ceil(percentForOne);
+          } else {
+            cur = diffRest + Math.ceil(percentForOne);
+          }
+          
+          if (diff > 0) {
+            // если нужно уменьшать значения остальных
+            if (el.value - cur >= 0) {
+            // если в результате уменьшения значение ползунка останется большим или равным нулю, то просто уменьшаем
+              el.value -= cur
             } else {
-              el.value += percentForOne
+            // если в результате уменьшения значение ползунка окажется меньше нуля, то нужно "вернуть" разницу, чтобы поделить ее на оставшиеся ползунки
+              diffRest += (cur - el.value);
+              el.value = 0;
             }
           } else {
-            cur = Math.round(percentForOne);
-            diffRest -= cur;
-            if (diffRest >= 0) {
-              if (diff > 0) {
-                if (el.value - cur >= 0) {
-                  el.value -= cur
-                } else {
-                  diffRest += (cur - el.value);
-                  el.value = 0;
-                }
-              } else {
-                if (el.value + cur <= 1000) {
-                  el.value += cur;
-                } else {
-                  //diffRest += (cur - el.value);
-                  el.value = 1000;
-                }
-              }
+            // если нужно увеличивать значения остальных
+            if (el.value + cur <= 1000) {
+              // если в результате увеличения значение ползунка меньшим или равным 1000, то просто увеличиваем
+              el.value += cur;
             } else {
-              let tempDelta = diffRest + cur;
-              if (diff > 0) {
-                if (el.value - tempDelta >= 0) {
-                  el.value -= tempDelta;
-                } else {
-                  diffRest += (tempDelta - el.value);
-                  el.value = 0;
-                }
-              } else {
-                if (el.value - tempDelta <= 1000) {
-                  el.value += (diffRest + cur);
-                } else {
-                  el.value = 1000;
-                }
-              }
+              // если в результате увеличения значение ползунка окажется больше 1000, то нужно "вернуть" разницу, чтобы поделить ее на оставшиеся ползунки
+              diffRest += (el.value + cur - 1000);
+              el.value = 1000;
             }
           }
         } else {
           el.value = percentNew;
         }
-        this.updateModel(idx, el.value);
       })
     },
 
@@ -524,7 +260,7 @@ export default {
       let percent = 0;
 
       this.sections.forEach((el, idx) => {
-        percent = random.int(1, 600);
+        percent = random.int(1, 300);
 
         let newValue = 0;
         if (idx === 0) {
@@ -540,19 +276,7 @@ export default {
             newValue = 1000 - this.getTotalPercents() * 10;
           }
         }
-        console.log(
-          `i=${idx} random=${percent} | total=${
-            this.total
-          } | newValue=${newValue}`
-        );
         this.sections[idx].value = newValue;
-
-        // update model
-        if (idx === 0) this.valueWeat = newValue;
-        if (idx === 1) this.valueRye = newValue;
-        if (idx === 2) this.valueHybridRye = newValue;
-        if (idx === 3) this.valueCorn = newValue;
-        if (idx === 4) this.valueRape = newValue;
       })
     },
   },
@@ -600,7 +324,13 @@ h1 {
 .fields-settings p {
   margin: 0;
 }
-
+.field-type-wrapper {
+  padding: 5px;
+  box-shadow: 0px 0 6px 1px #7d6d4a45;
+  margin: 10px;
+  border-radius: 10px;
+  margin: 10px;
+}
 .field-type {
   font-family: Verdana;
   font-size: 13px;
@@ -641,28 +371,5 @@ h1 {
   text-decoration: none;
   border-bottom: 1px dotted #333333;
   font-family: Arial;
-}
-.slider {
-  margin: 20px 0 0 0;
-  width: 100%;
-}
-.range-slider .range-slider-knob {
-  width: 16px;
-  height: 16px;
-}
-.range-slider.slider.slider--weat .range-slider-inner .range-slider-fill {
-  background-color: #8f2901;
-}
-.range-slider.slider.slider--rye .range-slider-inner .range-slider-fill {
-  background-color: #d56844;
-}
-.range-slider.slider.slider--hybridRye .range-slider-inner .range-slider-fill {
-  background-color: #ffaf3a;
-}
-.range-slider.slider.slider--corn .range-slider-inner .range-slider-fill {
-  background-color: #e0cd64;
-}
-.range-slider.slider.slider--rape .range-slider-inner .range-slider-fill {
-  background-color: #458865;
 }
 </style>
