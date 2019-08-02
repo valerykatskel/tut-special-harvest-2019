@@ -7,7 +7,7 @@
       <div class="sections-settings">
         <div class="fields-settings">
           <p>Общая площадь полей: {{totalFields}} га.</p>
-          <p>Всего засеяно: {{total}}% | Осталось засеять: {{remaining.toFixed(2)}}%</p>
+          <p>Всего засеяно: {{total}}% | Осталось засеять: {{remaining.toFixed(0)}}%</p>
 
           <harvest-field
             v-for="(section, index) in this.sections" 
@@ -23,9 +23,9 @@
           <vc-donut
             background="white"
             foreground="grey"
-            :size="250"
+            :size="350"
             unit="px"
-            :thickness="60"
+            :thickness="100"
             :sections="sections"
             :total="1000"
             :start-angle="0"
@@ -111,7 +111,7 @@ export default {
     getTotalPercents() {
       let total = 0;
       this.sections.forEach(el => (total += el.value));
-      return (total / 10).toFixed(2);
+      return total / 10;
     },
 
     correctValues(index, deltaValue) {
@@ -217,9 +217,16 @@ export default {
       } else {
         let diff = percentNew - percentOld;
         if (diff === 0) return;
+        let filteredSections = [];
+        let length = 0;
 
-        let filteredSections = this.sections.filter((el, num) => (el.value > 0 || num === index)) ;
-        let length = filteredSections.length;
+        if (percentOld < 1000) {
+          filteredSections = this.sections.filter((el, num) => (el.value > 0 || num === index));
+          length = filteredSections.length;
+        } else {
+          length = this.sections.length;
+        }
+        
 
         let diffRest = Math.abs(diff);
         let percentForOne = diffRest / (length-1);
@@ -228,7 +235,7 @@ export default {
         while (diffRest > 0) {
           this.sections.forEach((el, idx) => {
             if (idx !== index) {
-              if (el.value !== 0 && diffRest > 0) {
+              if (((el.value !== 0 && percentOld < 1000) || (percentOld === 1000)) && diffRest > 0) {
                 // тут проходимся по каждому значению оставшися полей и распределяем поровну значение, на которое был сдвинут ползунок
                 diffRest -= cur;
                 if (diffRest < 0) {
@@ -287,7 +294,7 @@ export default {
       let percent = 0;
 
       this.sections.forEach((el, idx) => {
-        percent = random.int(300, 600);
+        percent = random.int(1, 300);
 
         let newValue = 0;
         if (idx === 0) {

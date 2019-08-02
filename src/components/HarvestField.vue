@@ -2,7 +2,7 @@
   <!-- {{this.section.label}} -->
   <div class="field-type-wrapper">
     <p class="field-type">
-      {{this.section.label}}: {{(this.section.value/10).toFixed(2)}}%
+      {{this.section.label}}: {{(this.section.value/10).toFixed(0)}}%
       <span>урожайность: {{this.section.harvest}} ц/га</span>
       <span>урожай: {{this.harvest}}</span>
     </p>
@@ -23,7 +23,7 @@
         :class="getSliderClass()"
         min="0" 
         max="1000" 
-        step="1"
+        step="10"
         :name="this.section.name"
         :value="this.section.value"
         @input="onInputRange($event)"
