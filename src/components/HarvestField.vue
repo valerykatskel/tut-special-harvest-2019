@@ -23,7 +23,7 @@
         :class="getSliderClass()"
         min="0" 
         max="1000" 
-        step="10"
+        step="4"
         :name="this.section.name"
         :value="this.section.value"
         @input="onInputRange($event)"
