@@ -205,51 +205,79 @@ export default {
       // index - индекс поля, значение которого мы изменяем
       let percentOld = data.oldValue;
       let percentNew = typeof data.newValue === 'number'? data.newValue : data.newValue.target.valueAsNumber;
-      let diff = percentNew - percentOld;
-      if (diff === 0) return;
-
-      let filteredSections = this.sections.filter((el, num) => (el.value > 0 || num === index)) ;
-      let length = filteredSections.length;
-
-      let diffRest = Math.abs(diff);
-      let percentForOne = diffRest / (length-1);
-      let cur = Math.ceil(percentForOne);
       
-      this.sections.forEach((el, idx) => {
-        if (idx !== index) {
-          if (el.value !== 0 && diffRest > 0) {
-            // тут проходимся по каждому значению оставшися полей и распределяем поровну значение, на которое был сдвинут ползунок
-            diffRest -= cur;
-            if (diffRest < 0) {
-              cur = diffRest + Math.ceil(percentForOne);
-            }
-            
-            if (diff > 0) {
-              // если нужно уменьшать значения остальных
-              if (el.value - cur >= 0) {
-              // если в результате уменьшения значение ползунка останется большим или равным нулю, то просто уменьшаем
-                el.value -= cur
-              } else {
-              // если в результате уменьшения значение ползунка окажется меньше нуля, то нужно "вернуть" разницу, чтобы поделить ее на оставшиеся ползунки
-                diffRest += (cur - el.value);
-                el.value = 0;
+      if (percentNew === 1000) {
+        this.sections.forEach((el, idx) => {
+          if (idx === index) {
+            el.value = 1000;
+          } else {
+            el.value = 0;
+          }
+        })
+      } else {
+        let diff = percentNew - percentOld;
+        if (diff === 0) return;
+
+        let filteredSections = this.sections.filter((el, num) => (el.value > 0 || num === index)) ;
+        let length = filteredSections.length;
+
+        let diffRest = Math.abs(diff);
+        let percentForOne = diffRest / (length-1);
+        let cur = Math.ceil(percentForOne);
+        
+        while (diffRest > 0) {
+          this.sections.forEach((el, idx) => {
+            if (idx !== index) {
+              if (el.value !== 0 && diffRest > 0) {
+                // тут проходимся по каждому значению оставшися полей и распределяем поровну значение, на которое был сдвинут ползунок
+                diffRest -= cur;
+                if (diffRest < 0) {
+                  cur = diffRest + Math.ceil(percentForOne);
+                  diffRest = 0;
+                }
+                
+                if (diff > 0) {
+                  // если нужно уменьшать значения остальных
+                  if (el.value - cur >= 0) {
+                  // если в результате уменьшения значение ползунка останется большим или равным нулю, то просто уменьшаем
+                    el.value -= cur
+                  } else {
+                  // если в результате уменьшения значение ползунка окажется меньше нуля, то нужно "вернуть" разницу, чтобы поделить ее на оставшиеся ползунки
+                    if (diffRest > 0) {
+                      diffRest += (cur - el.value);
+                      el.value = 0;
+                      length -= 1;
+                      percentForOne = diffRest / (length-1);
+                      cur = Math.ceil(percentForOne);
+                    } else {
+                      el.value = 0;
+                    }
+                  }
+                } else {
+                  // если нужно увеличивать значения остальных
+                  if (el.value + cur <= 1000) {
+                    // если в результате увеличения значение ползунка меньшим или равным 1000, то просто увеличиваем
+                    el.value += cur;
+                  } else {
+                    // если в результате увеличения значение ползунка окажется больше 1000, то нужно "вернуть" разницу, чтобы поделить ее на оставшиеся ползунки
+                    if (diffRest > 0) {
+                      diffRest += (el.value + cur - 1000);
+                      el.value = 1000;
+                      length -= 1;
+                      percentForOne = diffRest / (length-1);
+                      cur = Math.ceil(percentForOne);
+                    } else {
+                      el.value = 1000;
+                    }
+                  }
+                } 
               }
             } else {
-              // если нужно увеличивать значения остальных
-              if (el.value + cur <= 1000) {
-                // если в результате увеличения значение ползунка меньшим или равным 1000, то просто увеличиваем
-                el.value += cur;
-              } else {
-                // если в результате увеличения значение ползунка окажется больше 1000, то нужно "вернуть" разницу, чтобы поделить ее на оставшиеся ползунки
-                diffRest += (el.value + cur - 1000);
-                el.value = 1000;
-              }
-            } 
-          }
-        } else {
-          el.value = percentNew;
+              el.value = percentNew;
+            }
+          })
         }
-      })
+      }
     },
 
     setPercentsRandom() {
