@@ -1,13 +1,25 @@
 <template>
-  <div id="app">
-    <result-section :sections="this.sections" v-if="showResult"/>
+  <div 
+    id="QuizSettings"
+    :data-wheat-value="this.sections[0].value/10"
+    :data-rye-value="this.sections[1].value/10"
+    :data-hybridRye-value="this.sections[2].value/10"
+    :data-corn-value="this.sections[3].value/10"
+    :data-rape-value="this.sections[4].value/10" 
+    :data-total-harvest="this.totalHarvest"   
+  >
+    <result-section 
+      v-show="showResult"
+      :sections="this.sections" 
+      :totalHarvest="this.totalHarvest"
+    />
 
-    <div class="sections" v-show="!showResult">
+    <div class="QuizSettingsSections" v-show="!showResult">
       <h1>Для начала решите, чем засеете поля страны</h1>
       <div class="sections-settings">
         <div class="fields-settings">
-          <p>Общая площадь полей: {{totalFields}} га.</p>
-          <p>Всего засеяно: {{total}}% | Осталось засеять: {{remaining.toFixed(0)}}%</p>
+          <!-- <p>Общая площадь полей: {{totalFields}} га.</p>
+          <p>Всего засеяно: {{total}}% | Осталось засеять: {{remaining.toFixed(0)}}%</p> -->
 
           <harvest-field
             v-for="(section, index) in this.sections" 
@@ -165,11 +177,11 @@ export default {
       if (val > 0) {
         if (val < 1000) return `${val} центнеров`;
 
-        let result = (val / 10).toFixed(2);
+        let result = (val / 100).toFixed(2);
 
-        if (result > 1000000)
+        if (result > 10000000)
           return `${(result / 1000000).toFixed(2)} млн тонн`;
-        if (result > 1000) return `${(result / 1000).toFixed(2)} тысяч тонн`;
+        if (result > 10000) return `${(result / 1000).toFixed(2)} тысяч тонн`;
         return `${result} тонн`;
       } else return 'пока не собрали';
     },
@@ -357,13 +369,6 @@ h1 {
 }
 .fields-settings p {
   margin: 0;
-}
-.field-type-wrapper {
-  padding: 5px;
-  box-shadow: 0px 0 6px 1px #7d6d4a45;
-  margin: 10px;
-  border-radius: 10px;
-  margin: 10px;
 }
 .field-type {
   font-family: Verdana;

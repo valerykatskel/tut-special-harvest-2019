@@ -1,5 +1,5 @@
 <template>
-  <div class="result">
+  <div class="QuizSettingsResult">
     <h2>Результаты засеивания</h2>
     <p>
       В 2018 году урожайность ржи была
