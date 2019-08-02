@@ -243,7 +243,7 @@ export default {
                     el.value -= cur
                   } else {
                   // если в результате уменьшения значение ползунка окажется меньше нуля, то нужно "вернуть" разницу, чтобы поделить ее на оставшиеся ползунки
-                    if (diffRest > 0) {
+                    if (diffRest >= 0) {
                       diffRest += (cur - el.value);
                       el.value = 0;
                       length -= 1;
@@ -260,7 +260,7 @@ export default {
                     el.value += cur;
                   } else {
                     // если в результате увеличения значение ползунка окажется больше 1000, то нужно "вернуть" разницу, чтобы поделить ее на оставшиеся ползунки
-                    if (diffRest > 0) {
+                    if (diffRest >= 0) {
                       diffRest += (el.value + cur - 1000);
                       el.value = 1000;
                       length -= 1;
