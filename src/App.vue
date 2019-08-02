@@ -1,17 +1,12 @@
 <template>
   <div 
     id="QuizSettings"
-    :data-wheat-value="this.sections[0].value/10"
-    :data-rye-value="this.sections[1].value/10"
-    :data-hybridRye-value="this.sections[2].value/10"
-    :data-corn-value="this.sections[3].value/10"
-    :data-rape-value="this.sections[4].value/10" 
-    :data-total-harvest="this.totalHarvest"   
+    :data-total-harvest="this.centnerToTon(this.totalHarvest, false)"   
   >
     <result-section 
       v-show="showResult"
       :sections="this.sections" 
-      :totalHarvest="this.totalHarvest"
+      :totalHarvest="this.centnerToTon(this.totalHarvest, true)"
     />
 
     <div class="QuizSettingsSections" v-show="!showResult">
@@ -26,7 +21,6 @@
             :key="index"
             :rangeId="index"
             :section="section"
-            :harvest="getHarvest(index)"
             @range-changed="setPercents($event)"
           />        
           
@@ -166,24 +160,17 @@ export default {
       this.showResult = !this.showResult;
     },
 
-    getHarvest(index) {
-      let el = this.sections[index];
-      return this.centnerToTon(
-        (this.totalFields * (el.value / 1000) * el.harvest).toFixed(2)
-      );
-    },
-
-    centnerToTon(val) {
+    centnerToTon(val, showText) {
       if (val > 0) {
-        if (val < 1000) return `${val} центнеров`;
+        if (val < 1000) return showText? `${val} центнеров` : val;
 
         let result = (val / 100).toFixed(2);
 
         if (result > 10000000)
-          return `${(result / 1000000).toFixed(2)} млн тонн`;
-        if (result > 10000) return `${(result / 1000).toFixed(2)} тысяч тонн`;
-        return `${result} тонн`;
-      } else return 'пока не собрали';
+          return showText? `${(result / 1000000).toFixed(2)} млн тонн` : (result / 1000000).toFixed(2);
+        if (result > 10000) return showText?  `${(result / 1000).toFixed(2)} тысяч тонн` : (result / 1000).toFixed(2);
+        return showText? `${result} тонн` : result;
+      } else return showText? 'пока не собрали' : '';
     },
 
     clearPercents() {
@@ -341,7 +328,7 @@ export default {
       this.sections.forEach(
         el => (totalValue += this.totalFields * (el.value / 100) * el.harvest)
       );
-      return this.centnerToTon(totalValue.toFixed(2));
+      return totalValue.toFixed(2);
     },
 
     remaining() {

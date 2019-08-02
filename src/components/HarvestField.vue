@@ -3,8 +3,6 @@
   <div class="field-type-wrapper">
     <p class="field-type">
       {{this.section.label}}: {{(this.section.value/10).toFixed(0)}}%
-      <!-- <span>урожайность: {{this.section.harvest}} ц/га</span>
-      <span>урожай: {{this.harvest}}</span> -->
     </p>
     <div class="b-range-slider">
       <!-- <input 
@@ -43,13 +41,7 @@ export default {
     RangeSlider
   },
 
-  props: ['section', 'harvest', 'rangeId'],
-
-  computed: {
-    harvestRye() {
-      return this.section.harvest;
-    }
-  },
+  props: ['section', 'rangeId'],
 
   methods: {
     // Метод обрабатывает клик по кнопке начала игры
