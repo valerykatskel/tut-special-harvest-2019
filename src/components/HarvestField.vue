@@ -1,21 +1,9 @@
 <template>
-  <!-- {{this.section.label}} -->
   <div class="field-type-wrapper">
     <p class="field-type">
       {{this.section.label}}: {{(this.section.value/10).toFixed(0)}}%
     </p>
     <div class="b-range-slider">
-      <!-- <input 
-        type="range" 
-        :rangeId="this.rangeId"
-        :class="getSliderClass()"
-        min="0" 
-        max="1000" 
-        step="1"
-        :name="this.section.name"
-        :value="this.section.value"
-        @input="onInputRange($event)"
-      /> -->
       <range-slider
         :rangeId="this.rangeId"
         :class="getSliderClass()"
