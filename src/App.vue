@@ -13,9 +13,6 @@
       <h1>Для начала решите, чем засеете поля страны</h1>
       <div class="sections-settings">
         <div class="fields-settings">
-          <!-- <p>Общая площадь полей: {{totalFields}} га.</p>
-          <p>Всего засеяно: {{total}}% | Осталось засеять: {{remaining.toFixed(0)}}%</p> -->
-
           <harvest-field
             v-for="(section, index) in this.sections" 
             :key="index"
@@ -29,7 +26,7 @@
           <vc-donut
             background="white"
             foreground="grey"
-            :size="350"
+            :size="280"
             unit="px"
             :thickness="100"
             :sections="sections"
@@ -337,25 +334,35 @@ export default {
   }
 };
 </script>
-<style>
+<style lang="scss">
 h1 {
   font-family: Arial;
   font-size: 21px;
   font-weight: bold;
+  margin-bottom: 20px;
 }
 .sections-settings {
   background-color: #fbeee0;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: space-between;
   padding: 30px;
 }
 .fields-settings {
   font-family: Verdana;
   font-size: 11px;
+  width: 100%;
+  padding-right: 45px;
+  margin-top: 6px;
 }
 .fields-settings p {
-  margin: 0;
+  margin: 0 0 -2px 0;
+}
+.field-type-wrapper {
+  margin: 5px 0 12px 0;
+  .b-range-slider {
+    margin-top: 0;
+  }
 }
 .field-type {
   font-family: Verdana;
@@ -390,12 +397,16 @@ h1 {
   transition: all 300ms;
   border: 0;
   margin-bottom: 30px;
+  cursor: pointer;
+  &:hover{
+    background:#a27e5c;
+  }
 }
 .button--sow-random {
-  font-size: 15px;
-  color: #333333;
-  text-decoration: none;
-  border-bottom: 1px dotted #333333;
-  font-family: Arial;
+  font-size: 15px!important;
+  color: #333333!important;
+  text-decoration: none!important;
+  border-bottom: 1px dotted #333333!important;
+  font-family: Arial!important;
 }
 </style>
