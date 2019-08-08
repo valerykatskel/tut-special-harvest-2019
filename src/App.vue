@@ -117,42 +117,6 @@ export default {
       return total / 10;
     },
 
-    correctValues(index, deltaValue) {
-      let data = this.sections.filter((el, i) => i > index);
-      let d = -1 * (deltaValue / data.length);
-      let totalSum;
-
-      let sumValue = 0;
-      this.sections.forEach((el, i) =>
-        i <= index ? (sumValue += el.value) : ""
-      );
-      totalSum = sumValue;
-
-      if (sumValue < 1000) {
-        data.forEach((el, i) => {
-          if (this.sections[i] > 0) {
-            if (i === data.length - 1) {
-              if (1000 - totalSum >= 0) {
-                el.value = 1000 - totalSum;
-                totalSum += el.value;
-              }
-            } else {
-              if (el.value + d >= 0) {
-                let newValue = el.value + d;
-
-                el.value = newValue;
-                totalSum += el.value;
-              }
-            }
-          }
-        });
-      }
-    },
-
-    maxValue(index) {
-      return this.total < 1000 ? 1000 : this.sections[index].value;
-    },
-
     onSow() {
       this.showResult = !this.showResult;
     },
@@ -174,26 +138,6 @@ export default {
       this.sections.forEach(el => {
         el.value = 0;
       });
-    },
-
-    getValueFromRange (i) {
-      return this.sections[i].value;
-    },
-
-    isNumberWithoutRemainder (val) {
-      if (val < 10) {
-        if (Math.round(val % 10) == val) {
-          return true;
-        } else {
-          return false;
-        }
-      } else {
-        if (val % 10 === 0) {
-          return true;
-        } else {
-          return false;
-        }
-      }
     },
 
     setPercents(data) {
