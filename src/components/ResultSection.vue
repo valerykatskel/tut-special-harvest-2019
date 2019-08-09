@@ -1,22 +1,7 @@
 <template>
   <div class="QuizSettingsResult">
-    <h2>Результаты засеивания</h2>
-    <p>
-      В 2018 году урожайность ржи была
-      <strong>{{this.sections[1].harvest}}</strong>
-      центнера с гектара, пшеницы —
-      <strong>{{sections[0].harvest}}</strong>,
-      кукурузы —
-      <strong>{{sections[3].harvest}}</strong>, рапса —
-      <strong>{{sections[4].harvest}}</strong>, а гибридной ржи — аж
-      <strong>{{sections[2].harvest}}</strong>
-      .
-      При идеальных условиях с такой структурой посевных площадей вы могли бы
-      собрать <strong>{{this.totalHarvest}}</strong> урожая.
-      Вашим планам могут помешать погода, бесхозяйственность, экономические
-      трудности. Попробуйте сохранить хотя бы 9,5 млн тонн, как того потребовал
-      президент. Если значение упадет ниже 6,5 млн тонн, игра для вас закончится.
-    </p>
+    <h2>{{text.resultTitle}}</h2>
+    <div v-html="transformText"></div>
   </div>
 </template>
 
@@ -39,6 +24,27 @@ export default {
     },
   },
 
-  props: ['sections', 'totalHarvest'],
+  computed: {
+
+
+    transformText () {
+      var re0 = /##harvestWheat##/gi;
+      var re1 = /##harvestRye##/gi;
+      var re2 = /##harvestHybridRye##/gi;
+      var re3 = /##harvestCorn##/gi;
+      var re4 = /##harvestRape##/gi;
+      var re5 = /##harvest##/gi;
+      let txt = this.text.resultText
+      txt = txt.replace(re0, this.sections[0].harvest);
+      txt = txt.replace(re1, this.sections[1].harvest);
+      txt = txt.replace(re2, this.sections[2].harvest);
+      txt = txt.replace(re3, this.sections[3].harvest);
+      txt = txt.replace(re4, this.sections[4].harvest);
+      txt = txt.replace(re5, this.totalHarvest);
+      return txt;
+    }
+  },
+
+  props: ['sections', 'totalHarvest', 'text'],
 };
 </script>

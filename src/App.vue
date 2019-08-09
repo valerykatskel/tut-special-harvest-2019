@@ -7,10 +7,11 @@
       v-show="showResult"
       :sections="this.sections" 
       :totalHarvest="this.centnerToTon(this.totalHarvest, true)"
+      :text="this.text"
     />
 
     <div class="QuizSettingsSections" v-show="!showResult">
-      <h1>Для начала решите, чем засеете поля страны</h1>
+      <h1>{{this.text.header}}</h1>
       <div class="sections-settings">
         <div class="fields-settings">
           <harvest-field
@@ -38,12 +39,12 @@
         </div>
       </div>
       <div class="buttons-section">
-        <button class="button button--sow" :disabled="disableButton" @click="onSow()">Засеять</button>
+        <button class="button button--sow" :disabled="disableButton" @click="onSow()">{{this.text.button}}</button>
         <a
           href="#"
           class="button--sow-random"
           @click.prevent="setPercentsRandom()"
-        >Разделить поля абы как</a>
+        >{{this.text.link}}</a>
       </div>
     </div>
   </div>
@@ -64,6 +65,15 @@ export default {
 
   data () {
     return {
+      text: {
+        header: '',
+        button: 'Засеять',
+        link: 'Разделить поля абы как',
+        resultTitle: 'Результаты засеивания',
+        resultText:  `<p>В 2018 году урожайность ржи была <strong>##harvestRye##</strong> центнера с гектара, пшеницы — <strong>##harvestWheat##</strong>, кукурузы — <strong>##harvestCorn##</strong>, рапса — <strong>##harvestRape##</strong>, а гибридной ржи — аж <strong>##harvestHybridRye##</strong>.
+                    <p>При идеальных условиях с такой структурой посевных площадей вы могли бы собрать <strong>##harvest##</strong> урожая.</p>
+                    <p>Вашим планам могут помешать погода, бесхозяйственность, экономические трудности. Попробуйте сохранить хотя бы 9,5 млн тонн, как того потребовал президент. Если значение упадет ниже 6,5 млн тонн, игра для вас закончится.</p>`,
+      },
       showResult: false,
       totalFields: 6173000, // общая площать всех полей, доступных для засева (га)
       sections: [
@@ -107,10 +117,20 @@ export default {
   },
 
   created() {
-    this.setPercentsRandom();
+    this.applyUserOptions()
+    this.setPercentsRandom()
   },
 
   methods: {
+    applyUserOptions () {
+      // Метод копирует значения, которые переданы прямо в html при рендеринге, если такие есть.
+      if(Object.keys(initialData).length) {
+        Object.keys(initialData).map(el => {
+          this[el] = initialData[el];
+        })
+      }
+    },
+    
     getTotalPercents() {
       let total = 0;
       this.sections.forEach(el => (total += el.value));
@@ -331,7 +351,7 @@ h1 {
 }
 .button--sow {
   background-color: #b48d68;
-  width: 260px;
+  min-width: 260px;
   font-size: 15px;
   line-height: 19px;
   color: #fff;

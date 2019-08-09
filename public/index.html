@@ -8,6 +8,57 @@
     <title>tut-special-harvest-2019</title>
   </head>
   <body>
+    <script>
+      var initialData = {
+        text: {
+          header: 'Для начала решите, чем засеете поля страны',
+          button: 'Засеять',
+          link: 'Разделить поля абы как',
+          resultTitle: 'Результаты засеивания',
+          resultText:  `<p>В 2018 году урожайность ржи была <strong>##harvestRye##</strong> центнера с гектара, пшеницы — <strong>##harvestWheat##</strong>, кукурузы — <strong>##harvestCorn##</strong>, рапса — <strong>##harvestRape##</strong>, а гибридной ржи — аж <strong>##harvestHybridRye##</strong>.
+                    <p>При идеальных условиях с такой структурой посевных площадей вы могли бы собрать <strong>##harvest##</strong> урожая.</p>
+                    <p>Вашим планам могут помешать погода, бесхозяйственность, экономические трудности. Попробуйте сохранить хотя бы 9,5 млн тонн, как того потребовал президент. Если значение упадет ниже 6,5 млн тонн, игра для вас закончится.</p>`,
+        },
+        totalFields: 6173000, // общая площать всех полей, доступных для засева (га)
+        sections: [
+          {
+            label: 'Пшеница',
+            name: 'wheat',
+            value: 200,
+            color: '#8f2901',
+            harvest: 36.5
+          },
+          {
+            label: 'Рожь',
+            name: 'rye',
+            value: 200,
+            color: '#d56844',
+            harvest: 26.2
+          },
+          {
+            label: 'Гибридная рожь',
+            name: 'hybridRye',
+            value: 200,
+            color: '#ffaf3a',
+            harvest: 80.0
+          },
+          {
+            label: 'Кукуруза',
+            name: 'corn',
+            value: 200,
+            color: '#e0cd64',
+            harvest: 53.2
+          },
+          {
+            label: 'Рапс',
+            name: 'rape',
+            value: 200,
+            color: '#458865',
+            harvest: 20.9
+          }
+        ]
+      }
+    </script>
     <noscript>
       <strong>We're sorry but tut-special-harvest-2019 doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
