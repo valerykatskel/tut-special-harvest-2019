@@ -126,7 +126,7 @@ export default {
       // Метод копирует значения, которые переданы прямо в html при рендеринге, если такие есть.
       if(Object.keys(initialData).length) {
         Object.keys(initialData).map(el => {
-          this[el] = initialData[el];
+          this[el] = initialData[el]
         })
       }
     },
@@ -299,78 +299,118 @@ export default {
 };
 </script>
 <style lang="scss">
-h1 {
-  font-family: Arial;
-  font-size: 21px;
-  font-weight: bold;
-  margin-bottom: 20px;
-}
-.sections-settings {
-  background-color: #fbeee0;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 30px;
-}
-.fields-settings {
-  font-family: Verdana;
-  font-size: 11px;
-  width: 100%;
-  padding-right: 45px;
-  margin-top: 6px;
-}
-.fields-settings p {
-  margin: 0 0 -2px 0;
-}
-.field-type-wrapper {
-  margin: 5px 0 12px 0;
-  .b-range-slider {
-    margin-top: 0;
+#QuizSettings {
+  font-family: 'Arial Bold', Arial, Helvetica, sans-serif;
+  .QuizSettingsSections {
+    &:before,
+    &:after {
+      display:table;
+      content:"";
+    }
+    &:after {
+      clear:both;
+    }
+    h1 {
+      font-family: Arial;
+      font-size: 21px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      margin-top: 0;
+    }
+    .sections-settings {
+      background-color: #fbeee0;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      padding: 30px;
+      .fields-settings {
+        font-family: Verdana;
+        font-size: 11px;
+        width: 100%;
+        padding-right: 45px;
+        margin-top: 6px;
+        box-sizing: border-box;
+        p {
+          margin: 0 0 -2px 0;
+        }
+      }
+    }
+    .field-type-wrapper {
+      margin: 5px 0 12px 0;
+      .b-range-slider {
+        margin-top: 0;
+      }
+      .field-type {
+        font-family: 'Arial Bold', Arial, Helvetica, sans-serif;
+        font-size: 13px;
+        font-weight: bold;
+        line-height: 21px;
+        text-align: left;
+        span {
+          display: inline-block;
+          width: 100%;
+          color: gray;
+          font-weight: normal;
+          font-family: Arial;
+          font-size: 10px;
+        }
+      }
+    }
+
+    .buttons-section {
+      width: 100%;
+      text-align: center;
+      margin-top: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .button--sow {
+      background-color: #b48d68;
+      min-width: 260px;
+      font-size: 15px;
+      line-height: 19px;
+      color: #fff;
+      border-radius: 4px;
+      padding: 15px 90px 16px;
+      -webkit-transition: all 300ms;
+      transition: all 300ms;
+      border: 0;
+      margin-bottom: 30px;
+      cursor: pointer;
+      &:hover{
+        color: #fff!important;
+        background: #a27e5c!important;
+      }
+    }
+    .button--sow-random {
+      font-size: 15px!important;
+      color: #333333!important;
+      text-decoration: none!important;
+      border-bottom: 1px dotted #333333!important;
+      font-family: Arial!important;
+    }
   }
 }
-.field-type {
-  font-family: Verdana;
-  font-size: 13px;
-  font-weight: bold;
-}
-.field-type span {
-  display: inline-block;
-  width: 100%;
-  color: gray;
-  font-weight: normal;
-  font-family: Arial;
-  font-size: 10px;
-}
-.buttons-section {
-  width: 100%;
-  text-align: center;
-  margin-top: 30px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.button--sow {
-  background-color: #b48d68;
-  min-width: 260px;
-  font-size: 15px;
-  line-height: 19px;
-  color: #fff;
-  border-radius: 4px;
-  padding: 15px 90px 16px;
-  -webkit-transition: all 300ms;
-  transition: all 300ms;
-  border: 0;
-  margin-bottom: 30px;
-  cursor: pointer;
-  &:hover{
-    background:#a27e5c;
+@media (max-width: 640px) {
+  #QuizSettings {
+    .QuizSettingsSections {
+      .sections-settings {
+        flex-direction: column;
+        padding: 20px 15px 15px;
+      }
+      .sections-settings {
+        .fields-settings {
+          padding-right: 0;
+          margin-top: 0;
+        }
+      }
+      .field-type-wrapper {
+        .field-type {
+          font-size: 15px;
+        }
+      }
+    }
   }
-}
-.button--sow-random {
-  font-size: 15px!important;
-  color: #333333!important;
-  text-decoration: none!important;
-  border-bottom: 1px dotted #333333!important;
-  font-family: Arial!important;
 }
 </style>
